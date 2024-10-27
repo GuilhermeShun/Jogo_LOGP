@@ -23,53 +23,59 @@ class Cesta:
         self.altura = y2 - y1
         self.pontos = [self.P1, self.P2, self.P3, self.P4, self.P5, self.P6, self.P7]
         self.radius = 2
-        self.extremidades = {"rede_esquerda": [self.P1, self.P3], "rede_direita": [self.P2, self.P4], "rede_baixo": [self.P3, self.P4], "ponte": [self.P2, self.P6], "tabela": [self.P5, self.P7]}
+        self.extremidades = {"aro_esquerdo": [self.P1, self.P1], "rede_esquerda": [self.P1, self.P3], "rede_direita": [self.P2, self.P4], "rede_baixo": [self.P3, self.P4], "ponte": [self.P2, self.P6], "tabela": [self.P5, self.P7]}
                 
+        self.extremidades_aro_esquerdo = [self.P1, self.P1]
         self.extremidades_rede_esquerda = [self.P1, self.P3]
         self.extremidades_rede_baixo = [self.P3, self.P4]
         self.extremidades_rede_direita = [self.P4, self.P2]
         self.extremidades_ponte = [self.P2, self.P6]
         self.extremidades_tabela = [self.P5, self.P7]
         
+        self.aro_esquerdo_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.rede_esquerda_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.rede_direita_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.rede_baixo_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.ponte_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.tabela_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         
+        self.rede_esquerda_body.position = self.extremidades["aro_esquerdo"][0]
         self.rede_esquerda_body.position = self.extremidades["rede_esquerda"][0]
         self.rede_direita_body.position = self.extremidades["rede_direita"][0]
         self.rede_baixo_body.position = self.extremidades["rede_baixo"][0]
         self.ponte_body.position = self.extremidades["ponte"][0]
         self.tabela_body.position = self.extremidades["tabela"][0]
 
+        self.aro_esquerdo_shape = pymunk.Segment(self.aro_esquerdo_body, (0, 0), (0, 5), self.radius)
         self.rede_esquerda_shape = pymunk.Segment(self.rede_esquerda_body, (0, 0), (0, y2-y1), self.radius)
         self.rede_direita_shape = pymunk.Segment(self.rede_direita_body, (0, 0), (0, y2-y1), self.radius)
         self.rede_baixo_shape = pymunk.Segment(self.rede_baixo_body, (0, 0), (x2-x1, 0), self.radius)
         self.ponte_shape = pymunk.Segment(self.ponte_body, (0, 0), (x3-x2, 0), self.radius)
         self.tabela_shape = pymunk.Segment(self.tabela_body, (0, 0), (0, y4-y3), self.radius)
 
-        self.rede_esquerda_shape.elasticity = 0.6
-        self.rede_baixo_shape.elasticity = 0.6
-        self.rede_direita_shape.elasticity = 0.6      
-        self.ponte_shape.elasticity = 0.6      
-        self.tabela_shape.elasticity = 0.9
+        self.aro_esquerdo_shape.elasticity = 0.8
+        self.rede_esquerda_shape.elasticity = 0
+        self.rede_baixo_shape.elasticity = 0
+        self.rede_direita_shape.elasticity = 0     
+        self.ponte_shape.elasticity = 0.8
+        self.tabela_shape.elasticity = 0.5
 
+        self.aro_esquerdo_shape.friction = 0
         self.rede_esquerda_shape.friction = 0
         self.rede_baixo_shape.friction = 0
         self.rede_direita_shape.friction = 0      
         self.ponte_shape.friction = 0      
         self.tabela_shape.friction = 0
         
-        self.conjunto_bodies = [self.rede_esquerda_body, self.rede_direita_body, self.rede_baixo_body, self.ponte_body, self.tabela_body]  
-        self.conjunto_shapes = [self.rede_esquerda_shape, self.rede_direita_shape, self.rede_baixo_shape, self.ponte_shape, self.tabela_shape] 
+        self.conjunto_bodies = [self.aro_esquerdo_body, self.rede_esquerda_body, self.rede_direita_body, self.rede_baixo_body, self.ponte_body, self.tabela_body]  
+        self.conjunto_shapes = [self.aro_esquerdo_shape, self.rede_esquerda_shape, self.rede_direita_shape, self.rede_baixo_shape, self.ponte_shape, self.tabela_shape] 
         
         
         for body in self.conjunto_bodies:
             body.velocity = (0, 0)
         
 
-        self.conjunto_segmentos = [self.extremidades_rede_esquerda, self.extremidades_rede_baixo, self.extremidades_rede_direita, self.extremidades_ponte, self.extremidades_tabela]
+        self.conjunto_segmentos = [self.extremidades_aro_esquerdo, self.extremidades_rede_esquerda, self.extremidades_rede_baixo, self.extremidades_rede_direita, self.extremidades_ponte, self.extremidades_tabela]
         for body in self.conjunto_bodies:
             space.add(body)
 
@@ -81,6 +87,7 @@ class Cesta:
         for shape in self.conjunto_shapes:
             p1 = shape.a + shape.body.position
             p2 = shape.b + shape.body.position
+
             pygame.draw.line(tela, (255, 255, 255), p1, p2, self.radius)
 
     #função que altera aleatoriamente, em um determinado intervalo, a posição da cesta
@@ -89,6 +96,7 @@ class Cesta:
         variacao_vertical = random.randint(-150, 150)
 
         #Evita que o range da variação vertical seja definido a partir da posição atual da cesta, garantindo que ela esteja sempre no máximo 150 pixels acima ou abaixo da posição inicial
+        self.aro_esquerdo_body.position = self.extremidades["rede_esquerda"][0]
         self.rede_esquerda_body.position = self.extremidades["rede_esquerda"][0]
         self.rede_direita_body.position = self.extremidades["rede_direita"][0]
         self.rede_baixo_body.position = self.extremidades["rede_baixo"][0]

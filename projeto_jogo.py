@@ -30,9 +30,11 @@ def tela_inicial(tela):
             if event.type == pygame.QUIT:
                 return
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_clicado = True
+                if event.button == 1:
+                    mouse_clicado = True
             if event.type == pygame.MOUSEBUTTONUP:
-                mouse_clicado = False    
+                if event.button == 1:
+                    mouse_clicado = False    
         
         for botao in botoes:
             if botao.mouse_sobre():
@@ -89,9 +91,11 @@ def configuracoes(tela):
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_clicado = True
+                if event.button == 1:                    
+                    mouse_clicado = True
             if event.type == pygame.MOUSEBUTTONUP:
-                mouse_clicado = False   
+                if event.button == 1:                    
+                    mouse_clicado = False   
         
         for botao in botoes:
             if botao.mouse_sobre():
@@ -127,9 +131,11 @@ def pausa(tela):
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_clicado = True
+                if event.button == 1:                    
+                    mouse_clicado = True
             if event.type == pygame.MOUSEBUTTONUP:
-                mouse_clicado = False   
+                if event.button == 1:                    
+                    mouse_clicado = False   
         
         for botao in botoes:
             if botao.mouse_sobre():
@@ -163,19 +169,15 @@ def jogo(tela):
     texto_botao_pausar = exibir_texto(tela, "Pausar", 0,0, 30, (0, 0, 0))
     botoes = [botao_retornar, botao_pausar]
     lancamento = False
-    angulo = 45
-    velocidade = 500
     cesta = Cesta()
     bola = Bola()
     chao = Chao()
     parede_esquerda = Paredes((0, 0), (0, ALTURA_DA_TELA))
     parede_direita = Paredes((LARGURA_DA_TELA, 0), (LARGURA_DA_TELA, ALTURA_DA_TELA))
-    pode_ajustar_o_angulo = True
-    pode_ajustar_a_velocidade = True
     tempo_ao_ajustar = 0
     velocidade_horizontal = 0
     velocidade_vertical = 0
-    velocidade_maxima = 2000
+    velocidade_maxima = 1500
     velocidade_minima = 0
     pontos_trajetoria = []
     contador = 0
@@ -191,6 +193,7 @@ def jogo(tela):
     tempo_faltando = tempo_limite
     while True:
 
+
         retangulo = pygame.Rect(cesta.rede_esquerda_body.position.x, cesta.rede_esquerda_body.position.y, cesta.largura, cesta.altura)
 
         contador += 1
@@ -200,16 +203,21 @@ def jogo(tela):
         
         #verificador de teclas pressionadas
         key = pygame.key.get_pressed()
-
+        if key[pygame.K_f]:
+            bola.body.position = (LARGURA_DA_TELA-251, 0)
+            lancamento = True
+            bola.lancamento(0, 200)
         #Event handler do pygame
         for event in pygame.event.get():
             #Botão de fechar a janela
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_clicado = True
+                if event.button == 1:
+                    mouse_clicado = True
             if event.type == pygame.MOUSEBUTTONUP:
-                mouse_clicado = False   
+                if event.button == 1:
+                    mouse_clicado = False   
         
         for botao in botoes:
             if botao.mouse_sobre():
@@ -228,6 +236,7 @@ def jogo(tela):
             else:
                 tempo_total_pausado += resultado_da_pausa
         if tempo_faltando <= 0 and lancamento == False:
+            pygame.time.delay(1000)
             cesta.remover_do_pymunk()
             bola.remover_do_pymunk()
             parede_direita.remover_do_pymunk()
@@ -268,14 +277,14 @@ def jogo(tela):
 
             posicao_mouse = pygame.mouse.get_pos()
             velocidade_vertical =  (int(posicao_mouse[1]) - int(bola.body.position.y))
-            if velocidade_vertical <= -300:
-                velocidade_vertical = -300
-            if velocidade_vertical >= 0:
-                velocidade_vertical = 0
+            if velocidade_vertical <= -velocidade_maxima/5:
+                velocidade_vertical = -velocidade_maxima/5
+            if velocidade_vertical >= -10:
+                velocidade_vertical = -10
 
             velocidade_horizontal = (int(posicao_mouse[0]) - int(bola.body.position.x))
-            if velocidade_horizontal >= 300:
-                velocidade_horizontal = 300
+            if velocidade_horizontal >= velocidade_maxima/5:
+                velocidade_horizontal = velocidade_maxima/5
 
         #se a bola estiver no chão, e com velocidade vertical 0, então o lançamento acabou
         elif lancamento == True and bola.body.velocity.y == 0 and bola.body.position.y>=ALTURA_DA_TELA-100-bola.radius:
