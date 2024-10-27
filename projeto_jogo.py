@@ -185,7 +185,7 @@ def jogo(tela):
     distancia_linha_de_3 = 300
     largura_linha_de_3 = 6
     tempo_ao_iniciar = pygame.time.get_ticks()
-    tempo_limite = 6000
+    tempo_limite = 60000
     tempo_de_pausa = 0
     tempo_total_pausado = 0
     tempo_faltando = tempo_limite
@@ -238,10 +238,8 @@ def jogo(tela):
                 return 0                            #Fechar o jogo              
                 
             elif resultado_tela_fim_de_jogo == 1:
-                print("tela inicial")
                 return 1                            #Ir para a tela inicial
             elif resultado_tela_fim_de_jogo == 2:
-                print("jogar de novo")
                 return 2                            #Reiniciar o jogo
 
 
@@ -250,18 +248,18 @@ def jogo(tela):
         #velocidade_vertical = velocidade*math.sin(math.radians(-angulo))
 
         #realização do lançamento
-        if key[pygame.K_SPACE] == True and lancamento == False:
+        if mouse_clicado and not botao_retornar.clicado(mouse_clicado) and not botao_pausar.clicado(mouse_clicado) and not lancamento:
             lancamento = True
-            bola.lancamento(3*velocidade_horizontal, 3*velocidade_vertical)
+            bola.lancamento(5*velocidade_horizontal, 5*velocidade_vertical)
         
         #procedimentos enquanto a bola está no chão
         if lancamento == False:
             #movimento para a esquerda
-            if key[pygame.K_LEFT] == True and lancamento == False:
+            if key[pygame.K_a] == True and lancamento == False:
                 bola.body.velocity = (-250, 0)
 
             #movimento para a direita
-            elif key[pygame.K_RIGHT] == True and lancamento == False:
+            elif key[pygame.K_d] == True and lancamento == False:
                 bola.body.velocity = (250, 0)
 
             #a bola para
@@ -270,16 +268,15 @@ def jogo(tela):
 
             posicao_mouse = pygame.mouse.get_pos()
             velocidade_vertical =  (int(posicao_mouse[1]) - int(bola.body.position.y))
-            if velocidade_vertical <= -667:
-                velocidade_vertical = -667
+            if velocidade_vertical <= -300:
+                velocidade_vertical = -300
             if velocidade_vertical >= 0:
                 velocidade_vertical = 0
 
             velocidade_horizontal = (int(posicao_mouse[0]) - int(bola.body.position.x))
-            if velocidade_horizontal >= 667:
-                velocidade_horizontal = 667
+            if velocidade_horizontal >= 300:
+                velocidade_horizontal = 300
 
-            print(velocidade_vertical, velocidade_horizontal)
         #se a bola estiver no chão, e com velocidade vertical 0, então o lançamento acabou
         elif lancamento == True and bola.body.velocity.y == 0 and bola.body.position.y>=ALTURA_DA_TELA-100-bola.radius:
             lancamento = False
@@ -313,14 +310,15 @@ def jogo(tela):
         #pygame.draw.rect(tela, (200, 200, 200),retangulo) #visualização do hitbox da cesta
 
         #Exibição na tela dos elementos
-        botao_retornar.desenhar()
-        botao_pausar.desenhar()
-        tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
-        tela.blit(texto_botao_pausar, texto_botao_pausar.get_rect(center=(botao_pausar.posicao_x + botao_pausar.largura / 2, botao_pausar.posicao_y + botao_pausar.altura / 2)))
+        
         if lancamento:
             if contador%5 == 0:
                 pontos_trajetoria.append((int(bola.body.position.x), int(bola.body.position.y)))
             bola.desenhar_rastro(pontos_trajetoria)
+        botao_retornar.desenhar()
+        botao_pausar.desenhar()
+        tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
+        tela.blit(texto_botao_pausar, texto_botao_pausar.get_rect(center=(botao_pausar.posicao_x + botao_pausar.largura / 2, botao_pausar.posicao_y + botao_pausar.altura / 2)))
         cesta.desenhar()
         bola.desenhar()
         chao.desenhar()
@@ -379,13 +377,11 @@ def fim_de_jogo(tela):
         tela.blit(texto_botao_voltar_a_tela_inicial, texto_botao_voltar_a_tela_inicial.get_rect(center=(botao_voltar_a_tela_inicial.posicao_x + botao_voltar_a_tela_inicial.largura / 2, botao_voltar_a_tela_inicial.posicao_y + botao_voltar_a_tela_inicial.altura / 2)))        
         if botao_voltar_a_tela_inicial.clicado(mouse_clicado):
             mouse_clicado = False
-            print("tela inicial")
 
             return 1
         
         if botao_jogar_novamente.clicado(mouse_clicado):
             mouse_clicado = False
-            print("jogar de novo")
             return 2
         
 

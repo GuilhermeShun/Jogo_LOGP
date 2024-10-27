@@ -5,7 +5,7 @@ pygame.init()
 
 #Criação da tela no pygame
 LARGURA_DA_TELA = 1200
-ALTURA_DA_TELA = 800
+ALTURA_DA_TELA = 700
 tela = pygame.display.set_mode((LARGURA_DA_TELA, ALTURA_DA_TELA))
 print(pygame.Surface.get_flags(tela))
 
