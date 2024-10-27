@@ -203,10 +203,7 @@ def jogo(tela):
         
         #verificador de teclas pressionadas
         key = pygame.key.get_pressed()
-        if key[pygame.K_f]:
-            bola.body.position = (LARGURA_DA_TELA-251, 0)
-            lancamento = True
-            bola.lancamento(0, 200)
+
         #Event handler do pygame
         for event in pygame.event.get():
             #Botão de fechar a janela
