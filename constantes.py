@@ -23,5 +23,5 @@ space = pymunk.Space()
 space.gravity = 0, 1000
 
 mouse_clicado = False
-cor_do_botao = (255, 255, 255)
+cor_do_botao = (0, 0, 0)
 lancamento = False

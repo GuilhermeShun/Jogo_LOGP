@@ -14,9 +14,9 @@ Significados dos códigos de retorno:
 def tela_inicial(tela):
     global mouse_clicado, space
 
-    texto_start = exibir_texto(tela, "Iniciar", 0,0, 30, (0, 0, 0))
-    texto_options = exibir_texto(tela, "Opções", 0, 0, 30, (0, 0, 0))
-    texto_exit = exibir_texto(tela, "Sair", 0, 0, 30, (0, 0, 0))        
+    texto_start = exibir_texto(tela, "Iniciar", 0,0, 30, (255, 255, 255))
+    texto_options = exibir_texto(tela, "Opções", 0, 0, 30, (255, 255, 255))
+    texto_exit = exibir_texto(tela, "Sair", 0, 0, 30, (255, 255, 255))        
     start_button = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2 - 175})
     options_button = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2 - 100})
     exit_button = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2 - 25})
@@ -38,9 +38,9 @@ def tela_inicial(tela):
         
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (200, 200, 0)
+                botao.cor = (25, 25, 25)
             else:
-                botao.cor = (255, 255, 0)
+                botao.cor = (0, 0, 0)   
         
         if start_button.clicado(mouse_clicado):
             mouse_clicado = False
@@ -84,7 +84,7 @@ def configuracoes(tela):
     global mouse_clicado, lancamento
     botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2})
 
-    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (0, 0, 0))
+    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
     botoes = [botao_retornar]
     while True:
         for event in pygame.event.get():
@@ -99,9 +99,9 @@ def configuracoes(tela):
         
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (200, 200, 0)
+                botao.cor = (25, 25, 25)
             else:
-                botao.cor = (255, 255, 0)   
+                botao.cor = (0, 0, 0)   
         
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
@@ -121,7 +121,7 @@ def pausa(tela):
     global mouse_clicado
     botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2})
 
-    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (0, 0, 0))
+    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
     botoes = [botao_retornar]
     tempo_inicial = pygame.time.get_ticks()
     while True:
@@ -139,9 +139,9 @@ def pausa(tela):
         
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (200, 200, 0)
+                botao.cor = (25, 25, 25)
             else:
-                botao.cor = (255, 255, 0)   
+                botao.cor = (0, 0, 0)   
         
         tempo_decorrido_na_pausa = tempo - tempo_inicial
         
@@ -163,10 +163,10 @@ def pausa(tela):
 def jogo(tela):
 
     global mouse_clicado, tempo_de_pausa
-    botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 10, "coordenada_vertical": 10})
-    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (0, 0, 0))
-    botao_pausar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 10, "coordenada_vertical": 80})
-    texto_botao_pausar = exibir_texto(tela, "Pausar", 0,0, 30, (0, 0, 0))
+    botao_retornar = Botao((3, 13, 67), {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 10, "coordenada_vertical": 10})
+    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
+    botao_pausar = Botao((3, 13, 67), {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 10, "coordenada_vertical": 80})
+    texto_botao_pausar = exibir_texto(tela, "Pausar", 0,0, 30, (255, 255, 255))
     botoes = [botao_retornar, botao_pausar]
     lancamento = False
     cesta = Cesta()
@@ -192,7 +192,7 @@ def jogo(tela):
     tempo_total_pausado = 0
     tempo_faltando = tempo_limite
     while True:
-
+        
 
         retangulo = pygame.Rect(cesta.rede_esquerda_body.position.x, cesta.rede_esquerda_body.position.y, cesta.largura, cesta.altura)
 
@@ -216,11 +216,12 @@ def jogo(tela):
                 if event.button == 1:
                     mouse_clicado = False   
         
+
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (200, 200, 0)
+                botao.cor = (0, 0, 0)
             else:
-                botao.cor = (255, 255, 0)   
+                botao.cor = (23, 84, 133)   
         
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
@@ -248,11 +249,10 @@ def jogo(tela):
             elif resultado_tela_fim_de_jogo == 2:
                 return 2                            #Reiniciar o jogo
 
-
-        #definição dos componentes da velocidade, que serão passados em bola.lancamento()
-        #velocidade_horizontal = velocidade*math.cos(math.radians(-angulo))
-        #velocidade_vertical = velocidade*math.sin(math.radians(-angulo))
-
+        if bola.tocando_o_chao():
+            print("bola no chão")
+        else:
+            print("bola no ar")
         #realização do lançamento
         if mouse_clicado and not botao_retornar.clicado(mouse_clicado) and not botao_pausar.clicado(mouse_clicado) and not lancamento:
             lancamento = True
@@ -357,8 +357,8 @@ def fim_de_jogo(tela):
     botao_jogar_novamente = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": 400, "coordenada_vertical": 300})
     botao_voltar_a_tela_inicial = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": 400, "coordenada_vertical": 370})
     botoes = [botao_jogar_novamente, botao_voltar_a_tela_inicial]
-    texto_botao_jogar_novamente = exibir_texto(tela, "Jogar novamente", 0,0, 30, (0, 0, 0))
-    texto_botao_voltar_a_tela_inicial = exibir_texto(tela, "Tela inicial", 0,0, 30, (0, 0, 0))
+    texto_botao_jogar_novamente = exibir_texto(tela, "Jogar novamente", 0,0, 30, (255, 255, 255))
+    texto_botao_voltar_a_tela_inicial = exibir_texto(tela, "Tela inicial", 0,0, 30, (255, 255, 255))
     mouse_clicado = False
 
     while True:
@@ -373,9 +373,9 @@ def fim_de_jogo(tela):
         
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (230, 230, 230)
+                botao.cor = (25, 25, 25)
             else:
-                botao.cor = (255, 255, 255)   
+                botao.cor = (0, 0, 0)   
         
         botao_jogar_novamente.desenhar()
         botao_voltar_a_tela_inicial.desenhar()

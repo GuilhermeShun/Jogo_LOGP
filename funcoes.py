@@ -162,6 +162,11 @@ class Bola:
     def remover_do_pymunk(self):
         space.remove(self.shape, self.body)
                                           
+    def tocando_o_chao(self):
+        if self.body.position.y >= ALTURA_DA_TELA - 100.5 - self.radius:
+            return True
+        else:
+            return False
                 
 class Chao:
     def __init__(self):
