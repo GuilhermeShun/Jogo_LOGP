@@ -25,3 +25,13 @@ space.gravity = 0, 1000
 mouse_clicado = False
 cor_do_botao = (0, 0, 0)
 lancamento = False
+nivel = "facil"
+borda_do_botao = 1
+#cores
+'''
+cores_padrao = {"jogador": , "cesta": , "fonte": , "linhas": }
+tema_azul = {"chao": , "background": , "botao": , "botao_hover": , "vetor"}
+tema_verde = {"chao": , "background": , "botao": , "botao_hover": , "vetor"}
+tema_vermelho = {"chao": , "background": , "botao": , "botao_hover": , "vetor"}
+tema_menu = {"background": , "botao": , "botao_hover": , "em_volta_dos_botoes": }
+'''

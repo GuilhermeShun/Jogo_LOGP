@@ -81,11 +81,18 @@ def tela_inicial(tela):
         pygame.display.update()
 
 def configuracoes(tela):
-    global mouse_clicado, lancamento
-    botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2})
+    global mouse_clicado, lancamento, nivel
+    botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 30, "coordenada_vertical": 20})
+    botao_nivel_facil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 300, "coordenada_vertical": 200})
+    botao_nivel_medio = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 550, "coordenada_vertical": 200})
+    botao_nivel_dificil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 800, "coordenada_vertical": 200})
 
     texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
-    botoes = [botao_retornar]
+    texto_botao_nivel_facil = exibir_texto(tela, "Fácil", 0,0, 30, (255, 255, 255))
+    texto_botao_nivel_medio = exibir_texto(tela, "Médio", 0,0, 30, (255, 255, 255))
+    texto_botao_nivel_dificil = exibir_texto(tela, "Difícil", 0,0, 30, (255, 255, 255))
+    texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
+    botoes = [botao_retornar, botao_nivel_facil, botao_nivel_medio, botao_nivel_dificil]
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -97,21 +104,50 @@ def configuracoes(tela):
                 if event.button == 1:                    
                     mouse_clicado = False   
         
+
+        
+        if botao_retornar.clicado(mouse_clicado):
+            mouse_clicado = False
+            return True
+        if botao_nivel_facil.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Fácil"
+        if botao_nivel_medio.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Médio"
+        if botao_nivel_dificil.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Difícil"
+
+        print(nivel)
+        tela.fill((60, 60, 60))
+
+    
+        if nivel == "Fácil":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_facil.posicao_x - borda_do_botao, botao_nivel_facil.posicao_y - borda_do_botao, botao_nivel_facil.largura+2*borda_do_botao, botao_nivel_facil.altura+2*borda_do_botao))
+
+        if nivel == "Médio":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_medio.posicao_x - borda_do_botao, botao_nivel_medio.posicao_y - borda_do_botao, botao_nivel_medio.largura+2*borda_do_botao, botao_nivel_medio.altura+2*borda_do_botao))
+
+        if nivel == "Difícil":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_dificil.posicao_x - borda_do_botao, botao_nivel_dificil.posicao_y - borda_do_botao, botao_nivel_dificil.largura+2*borda_do_botao, botao_nivel_dificil.altura+2*borda_do_botao))
+        
         for botao in botoes:
             if botao.mouse_sobre():
                 botao.cor = (25, 25, 25)
             else:
                 botao.cor = (0, 0, 0)   
-        
-        if botao_retornar.clicado(mouse_clicado):
-            mouse_clicado = False
-            return True
 
-        tela.fill((60, 60, 60))
-        
         botao_retornar.desenhar()
+        botao_nivel_facil.desenhar()
+        botao_nivel_dificil.desenhar()
+        botao_nivel_medio.desenhar()
 
+        tela.blit(texto_nivel, pygame.Rect(100, 200, 150, 50))
         tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
+        tela.blit(texto_botao_nivel_facil, texto_botao_nivel_facil.get_rect(center=(botao_nivel_facil.posicao_x + botao_nivel_facil.largura / 2, botao_nivel_facil.posicao_y + botao_nivel_facil.altura / 2)))
+        tela.blit(texto_botao_nivel_medio, texto_botao_nivel_medio.get_rect(center=(botao_nivel_medio.posicao_x + botao_nivel_medio.largura / 2, botao_nivel_medio.posicao_y + botao_nivel_medio.altura / 2)))
+        tela.blit(texto_botao_nivel_dificil, texto_botao_nivel_dificil.get_rect(center=(botao_nivel_dificil.posicao_x + botao_nivel_dificil.largura / 2, botao_nivel_dificil.posicao_y + botao_nivel_dificil.altura / 2)))
 
         clock.tick(FPS)
 
@@ -137,11 +173,7 @@ def pausa(tela):
                 if event.button == 1:                    
                     mouse_clicado = False   
         
-        for botao in botoes:
-            if botao.mouse_sobre():
-                botao.cor = (25, 25, 25)
-            else:
-                botao.cor = (0, 0, 0)   
+ 
         
         tempo_decorrido_na_pausa = tempo - tempo_inicial
         
@@ -150,7 +182,12 @@ def pausa(tela):
             return tempo_decorrido_na_pausa
 
         tela.fill((255, 100, 100))
-        
+        for botao in botoes:
+            if botao.mouse_sobre():
+                botao.cor = (25, 25, 25)
+            else:
+                botao.cor = (0, 0, 0)  
+
         botao_retornar.desenhar()
 
         tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
@@ -178,7 +215,7 @@ def jogo(tela):
     velocidade_horizontal = 0
     velocidade_vertical = 0
     velocidade_maxima = 1500
-    velocidade_minima = 0
+    velocidade_minima = 10
     pontos_trajetoria = []
     contador = 0
     pode_fazer_ponto = True
@@ -192,6 +229,7 @@ def jogo(tela):
     tempo_total_pausado = 0
     tempo_faltando = tempo_limite
     while True:
+        
         
 
         retangulo = pygame.Rect(cesta.rede_esquerda_body.position.x, cesta.rede_esquerda_body.position.y, cesta.largura, cesta.altura)
@@ -217,11 +255,7 @@ def jogo(tela):
                     mouse_clicado = False   
         
 
-        for botao in botoes:
-            if botao.mouse_sobre():
-                botao.cor = (0, 0, 0)
-            else:
-                botao.cor = (23, 84, 133)   
+
         
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
@@ -249,15 +283,37 @@ def jogo(tela):
             elif resultado_tela_fim_de_jogo == 2:
                 return 2                            #Reiniciar o jogo
 
-        if bola.tocando_o_chao():
-            print("bola no chão")
-        else:
-            print("bola no ar")
         #realização do lançamento
         if mouse_clicado and not botao_retornar.clicado(mouse_clicado) and not botao_pausar.clicado(mouse_clicado) and not lancamento:
             lancamento = True
             bola.lancamento(5*velocidade_horizontal, 5*velocidade_vertical)
         
+        #se a bola sair da tela ou o jogador solicitar, é feito um respawn dela e a função cesta.posicao_aleatoria() é chamada, modificando sua posição aleatoriamente
+        if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0)):
+
+            acertou = False
+            pode_fazer_ponto = True
+            print(lancamento)
+            bola.respawn()
+
+            if nivel == "Médio" or nivel == "Difícil":
+                cesta.posicao_aleatoria()
+                       
+            tempo_ao_ajustar = pygame.time.get_ticks()
+
+        if retangulo.collidepoint(bola.body.position):
+            acertou = True
+            bola.respawn()
+
+        if acertou == True and pode_fazer_ponto == True:
+            #No basquete, caso o jogador pise na linha, a cesta é de 2 pontos. 
+            #Como no pygame a largura da linha é considerada para os dois lados a partir do seu centro, então a distância da linha de 3 deve ser considerada somada à metade da largura da linha
+            if bola.posicao_horizontal_ao_lancar < distancia_linha_de_3-largura_linha_de_3/2:
+                pontuacao += 3
+            elif bola.posicao_horizontal_ao_lancar >= distancia_linha_de_3-largura_linha_de_3/2:
+                pontuacao += 2
+            pode_fazer_ponto = False
+            
         #procedimentos enquanto a bola está no chão
         if lancamento == False:
             #movimento para a esquerda
@@ -276,12 +332,14 @@ def jogo(tela):
             velocidade_vertical =  (int(posicao_mouse[1]) - int(bola.body.position.y))
             if velocidade_vertical <= -velocidade_maxima/5:
                 velocidade_vertical = -velocidade_maxima/5
-            if velocidade_vertical >= -10:
-                velocidade_vertical = -10
+            if velocidade_vertical>= -velocidade_minima:
+                velocidade_vertical = -velocidade_minima
 
             velocidade_horizontal = (int(posicao_mouse[0]) - int(bola.body.position.x))
             if velocidade_horizontal >= velocidade_maxima/5:
                 velocidade_horizontal = velocidade_maxima/5
+            if velocidade_horizontal <= -velocidade_maxima/5:
+                velocidade_horizontal = -velocidade_maxima/5
 
         #se a bola estiver no chão, e com velocidade vertical 0, então o lançamento acabou
         elif lancamento == True and bola.body.velocity.y == 0 and bola.body.position.y>=ALTURA_DA_TELA-100-bola.radius:
@@ -289,27 +347,14 @@ def jogo(tela):
             acertou = False
             pode_fazer_ponto = True
 
-        #se a bola sair da tela ou o jogador solicitar, é feito um respawn dela e a função cesta.posicao_aleatoria() é chamada, modificando sua posição aleatoriamente
-        if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0)):
-            acertou = False
-            pode_fazer_ponto = True
-            bola.respawn()
-            cesta.posicao_aleatoria()
-            
-            tempo_ao_ajustar = pygame.time.get_ticks()
 
-        if retangulo.collidepoint(bola.body.position):
-            acertou = True
+
         
-        if acertou == True and pode_fazer_ponto == True:
-            #No basquete, caso o jogador pise na linha, a cesta é de 2 pontos. 
-            #Como no pygame a largura da linha é considerada para os dois lados a partir do seu centro, então a distância da linha de 3 deve ser considerada somada à metade da largura da linha
-            if bola.posicao_horizontal_ao_lancar < distancia_linha_de_3-largura_linha_de_3/2:
-                pontuacao += 3
-            elif bola.posicao_horizontal_ao_lancar >= distancia_linha_de_3-largura_linha_de_3/2:
-                pontuacao += 2
-            pode_fazer_ponto = False
-            
+
+        
+        if nivel == "Difícil":
+            cesta.movimento_horizontal()
+
         #Preenchimento da tela com a cor de fundo, para que a cada frame haja uma atualização do que é exibido
         tela.fill(COR_DE_FUNDO)
         
@@ -321,6 +366,11 @@ def jogo(tela):
             if contador%5 == 0:
                 pontos_trajetoria.append((int(bola.body.position.x), int(bola.body.position.y)))
             bola.desenhar_rastro(pontos_trajetoria)
+        for botao in botoes:
+            if botao.mouse_sobre():
+                botao.cor = (0, 0, 0)
+            else:
+                botao.cor = (23, 84, 133)   
         botao_retornar.desenhar()
         botao_pausar.desenhar()
         tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))

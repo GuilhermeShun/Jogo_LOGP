@@ -70,10 +70,10 @@ class Cesta:
         self.conjunto_bodies = [self.aro_esquerdo_body, self.rede_esquerda_body, self.rede_direita_body, self.rede_baixo_body, self.ponte_body, self.tabela_body]  
         self.conjunto_shapes = [self.aro_esquerdo_shape, self.rede_esquerda_shape, self.rede_direita_shape, self.rede_baixo_shape, self.ponte_shape, self.tabela_shape] 
         
+        if not nivel == "Fácil":
+            self.posicao_aleatoria()
         
-        for body in self.conjunto_bodies:
-            body.velocity = (0, 0)
-        
+
 
         self.conjunto_segmentos = [self.extremidades_aro_esquerdo, self.extremidades_rede_esquerda, self.extremidades_rede_baixo, self.extremidades_rede_direita, self.extremidades_ponte, self.extremidades_tabela]
         for body in self.conjunto_bodies:
@@ -81,7 +81,12 @@ class Cesta:
 
         for shape in self.conjunto_shapes:
             space.add(shape)
-            
+        for body in self.conjunto_bodies:
+            body.velocity = (0, 0)
+        if nivel == "Difícil":
+            for body in self.conjunto_bodies:
+                body.velocity = (-50, 0)
+
     def desenhar(self):
         #shape.a se refere ao ponto inicial e shape.b ao ponto final do shape
         for shape in self.conjunto_shapes:
@@ -92,11 +97,9 @@ class Cesta:
 
     #função que altera aleatoriamente, em um determinado intervalo, a posição da cesta
     def posicao_aleatoria(self):
-
         variacao_vertical = random.randint(-150, 150)
-
         #Evita que o range da variação vertical seja definido a partir da posição atual da cesta, garantindo que ela esteja sempre no máximo 150 pixels acima ou abaixo da posição inicial
-        self.aro_esquerdo_body.position = self.extremidades["rede_esquerda"][0]
+        self.aro_esquerdo_body.position = self.extremidades["aro_esquerdo"][0]
         self.rede_esquerda_body.position = self.extremidades["rede_esquerda"][0]
         self.rede_direita_body.position = self.extremidades["rede_direita"][0]
         self.rede_baixo_body.position = self.extremidades["rede_baixo"][0]
@@ -105,6 +108,25 @@ class Cesta:
 
         for body in self.conjunto_bodies:
             body.position += (0, variacao_vertical)
+
+    def sentido_do_movimento_horizontal(self):
+        if self.aro_esquerdo_body.velocity.x == 0:
+            return "Parado"
+        elif self.aro_esquerdo_body.velocity.x > 0:
+            return "Direita"
+        elif self.aro_esquerdo_body.velocity.x < 0:
+            return "Esquerda"
+       
+    def movimento_horizontal(self):
+        if self.sentido_do_movimento_horizontal()=="Parado":
+            for body in self.conjunto_bodies:
+                body.velocity = (-50, 0)
+        if self.sentido_do_movimento_horizontal()=="Esquerda" and self.aro_esquerdo_body.position.x <= self.extremidades["aro_esquerdo"][0][0]-100:
+            for body in self.conjunto_bodies:
+                body.velocity = (50, 0)
+        if self.sentido_do_movimento_horizontal()=="Direita" and self.aro_esquerdo_body.position.x >= self.extremidades["aro_esquerdo"][0][0]+100:
+            for body in self.conjunto_bodies:
+                body.velocity = (-50, 0)
 
     def remover_do_pymunk(self):
         for body in self.conjunto_bodies:
@@ -147,6 +169,7 @@ class Bola:
         self.body.position = 100, (ALTURA_DA_TELA-100-self.radius)
         self.body.velocity = (0, 0)
         self.shape.friction = 0
+        self.body.angular_velocity = 0
         self.lista.clear()
     
     def desenhar_rastro(self, lista):
@@ -216,10 +239,12 @@ class Botao:
     def mouse_sobre(self):
         (x_mouse, y_mouse) = pygame.mouse.get_pos()
         if self.limite_esquerdo <= x_mouse <= self.limite_direito and self.limite_inferior <= y_mouse <= self.limite_superior:
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(self.posicao_x - borda_do_botao, self.posicao_y - borda_do_botao, self.largura+2*borda_do_botao, self.altura+2*borda_do_botao))
             return True
         else:
             return False
-        
+
+
         
     def clicado(self, estado_do_mouse):
         (x_mouse, y_mouse) = pygame.mouse.get_pos()
