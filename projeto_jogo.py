@@ -12,7 +12,7 @@ Significados dos códigos de retorno:
 '''
 
 def tela_inicial(tela):
-    global mouse_clicado, space
+    global mouse_clicado, space, lancamento, nivel
 
     texto_start = exibir_texto(tela, "Iniciar", 0,0, 30, (255, 255, 255))
     texto_options = exibir_texto(tela, "Opções", 0, 0, 30, (255, 255, 255))
@@ -20,10 +20,19 @@ def tela_inicial(tela):
     start_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 150})
     options_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 75})
     exit_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2})
-    botoes = [start_button, options_button, exit_button]
+    botoes_menu = [start_button, options_button, exit_button]
     COR_DE_FUNDO = tema_menu["background"]
     RETANGULO_DOS_BOTOES = pygame.Rect(LARGURA_DA_TELA/2 - 200, ALTURA_DA_TELA/2 - 200, 400, 300)
-    
+   
+    botao_nivel_facil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 300, "coordenada_vertical": ALTURA_DA_TELA-100})
+    botao_nivel_medio = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 550, "coordenada_vertical": ALTURA_DA_TELA-100})
+    botao_nivel_dificil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 800, "coordenada_vertical": ALTURA_DA_TELA-100})
+
+    texto_botao_nivel_facil = exibir_texto(tela, "Fácil", 0,0, 30, (255, 255, 255))
+    texto_botao_nivel_medio = exibir_texto(tela, "Médio", 0,0, 30, (255, 255, 255))
+    texto_botao_nivel_dificil = exibir_texto(tela, "Difícil", 0,0, 30, (255, 255, 255))
+    texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
+    botoes_dificuldade = [botao_nivel_facil, botao_nivel_medio, botao_nivel_dificil]
     while True:
         
         tela.fill(COR_DE_FUNDO)
@@ -67,11 +76,19 @@ def tela_inicial(tela):
                 return
 
         pygame.draw.rect(tela, tema_menu["em_volta_dos_botoes"], RETANGULO_DOS_BOTOES)
-        for botao in botoes:
+        
+        for botao in botoes_menu:
             if botao.mouse_sobre():
                 botao.cor = tema_menu["botao_hover"]
             else:
                 botao.cor = tema_menu["botao"]
+
+        for botao in botoes_dificuldade:
+            if botao.mouse_sobre():
+                botao.cor = (25, 25, 25)
+            else:
+                botao.cor = (0, 0, 0)   
+
         start_button.desenhar()
         options_button.desenhar()
         exit_button.desenhar()
@@ -80,6 +97,35 @@ def tela_inicial(tela):
         tela.blit(texto_options, texto_options.get_rect(center=(options_button.posicao_x + options_button.largura / 2, options_button.posicao_y + options_button.altura / 2)))
         tela.blit(texto_exit, texto_exit.get_rect(center=(exit_button.posicao_x + exit_button.largura / 2, exit_button.posicao_y + exit_button.altura / 2)))
 
+        if botao_nivel_facil.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Fácil"
+        if botao_nivel_medio.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Médio"
+        if botao_nivel_dificil.clicado(mouse_clicado):
+            mouse_clicado = False
+            nivel = "Difícil"
+    
+        if nivel == "Fácil":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_facil.posicao_x - borda_do_botao, botao_nivel_facil.posicao_y - borda_do_botao, botao_nivel_facil.largura+2*borda_do_botao, botao_nivel_facil.altura+2*borda_do_botao))
+
+        if nivel == "Médio":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_medio.posicao_x - borda_do_botao, botao_nivel_medio.posicao_y - borda_do_botao, botao_nivel_medio.largura+2*borda_do_botao, botao_nivel_medio.altura+2*borda_do_botao))
+
+        if nivel == "Difícil":
+            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_dificil.posicao_x - borda_do_botao, botao_nivel_dificil.posicao_y - borda_do_botao, botao_nivel_dificil.largura+2*borda_do_botao, botao_nivel_dificil.altura+2*borda_do_botao))
+        
+
+        botao_nivel_facil.desenhar()
+        botao_nivel_dificil.desenhar()
+        botao_nivel_medio.desenhar()
+
+        tela.blit(texto_nivel, pygame.Rect(100, ALTURA_DA_TELA-100, 150, 50))
+        tela.blit(texto_botao_nivel_facil, texto_botao_nivel_facil.get_rect(center=(botao_nivel_facil.posicao_x + botao_nivel_facil.largura / 2, botao_nivel_facil.posicao_y + botao_nivel_facil.altura / 2)))
+        tela.blit(texto_botao_nivel_medio, texto_botao_nivel_medio.get_rect(center=(botao_nivel_medio.posicao_x + botao_nivel_medio.largura / 2, botao_nivel_medio.posicao_y + botao_nivel_medio.altura / 2)))
+        tela.blit(texto_botao_nivel_dificil, texto_botao_nivel_dificil.get_rect(center=(botao_nivel_dificil.posicao_x + botao_nivel_dificil.largura / 2, botao_nivel_dificil.posicao_y + botao_nivel_dificil.altura / 2)))
+
         clock.tick(FPS)
 
         pygame.display.update()
@@ -87,16 +133,9 @@ def tela_inicial(tela):
 def configuracoes(tela):
     global mouse_clicado, lancamento, nivel
     botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 30, "coordenada_vertical": 20})
-    botao_nivel_facil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 300, "coordenada_vertical": 200})
-    botao_nivel_medio = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 550, "coordenada_vertical": 200})
-    botao_nivel_dificil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 800, "coordenada_vertical": 200})
 
     texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
-    texto_botao_nivel_facil = exibir_texto(tela, "Fácil", 0,0, 30, (255, 255, 255))
-    texto_botao_nivel_medio = exibir_texto(tela, "Médio", 0,0, 30, (255, 255, 255))
-    texto_botao_nivel_dificil = exibir_texto(tela, "Difícil", 0,0, 30, (255, 255, 255))
-    texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
-    botoes = [botao_retornar, botao_nivel_facil, botao_nivel_medio, botao_nivel_dificil]
+    botoes = [botao_retornar]
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -113,28 +152,9 @@ def configuracoes(tela):
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
             return True
-        if botao_nivel_facil.clicado(mouse_clicado):
-            mouse_clicado = False
-            nivel = "Fácil"
-        if botao_nivel_medio.clicado(mouse_clicado):
-            mouse_clicado = False
-            nivel = "Médio"
-        if botao_nivel_dificil.clicado(mouse_clicado):
-            mouse_clicado = False
-            nivel = "Difícil"
-
+        
         tela.fill((60, 60, 60))
 
-    
-        if nivel == "Fácil":
-            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_facil.posicao_x - borda_do_botao, botao_nivel_facil.posicao_y - borda_do_botao, botao_nivel_facil.largura+2*borda_do_botao, botao_nivel_facil.altura+2*borda_do_botao))
-
-        if nivel == "Médio":
-            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_medio.posicao_x - borda_do_botao, botao_nivel_medio.posicao_y - borda_do_botao, botao_nivel_medio.largura+2*borda_do_botao, botao_nivel_medio.altura+2*borda_do_botao))
-
-        if nivel == "Difícil":
-            pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(botao_nivel_dificil.posicao_x - borda_do_botao, botao_nivel_dificil.posicao_y - borda_do_botao, botao_nivel_dificil.largura+2*borda_do_botao, botao_nivel_dificil.altura+2*borda_do_botao))
-        
         for botao in botoes:
             if botao.mouse_sobre():
                 botao.cor = (25, 25, 25)
@@ -142,15 +162,9 @@ def configuracoes(tela):
                 botao.cor = (0, 0, 0)   
 
         botao_retornar.desenhar()
-        botao_nivel_facil.desenhar()
-        botao_nivel_dificil.desenhar()
-        botao_nivel_medio.desenhar()
+ 
 
-        tela.blit(texto_nivel, pygame.Rect(100, 200, 150, 50))
         tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
-        tela.blit(texto_botao_nivel_facil, texto_botao_nivel_facil.get_rect(center=(botao_nivel_facil.posicao_x + botao_nivel_facil.largura / 2, botao_nivel_facil.posicao_y + botao_nivel_facil.altura / 2)))
-        tela.blit(texto_botao_nivel_medio, texto_botao_nivel_medio.get_rect(center=(botao_nivel_medio.posicao_x + botao_nivel_medio.largura / 2, botao_nivel_medio.posicao_y + botao_nivel_medio.altura / 2)))
-        tela.blit(texto_botao_nivel_dificil, texto_botao_nivel_dificil.get_rect(center=(botao_nivel_dificil.posicao_x + botao_nivel_dificil.largura / 2, botao_nivel_dificil.posicao_y + botao_nivel_dificil.altura / 2)))
 
         clock.tick(FPS)
 
