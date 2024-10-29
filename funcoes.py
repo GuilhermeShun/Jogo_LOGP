@@ -4,14 +4,13 @@ from constantes import *
 def exibir_texto(tela, texto, x, y, tamanho, cor, fonte_nome="comicsans"):
     fonte = pygame.font.SysFont(fonte_nome, tamanho)
     texto_surface = fonte.render(texto, True, cor)
-    tela.blit(texto_surface, (x, y))
     return texto_surface
 
 
 class Cesta:
     
     #vide desenho ilustrando o significado das coordenadas, presente no documento
-    def __init__(self, nivel, x1=LARGURA_DA_TELA-250, x2=LARGURA_DA_TELA-150, x3=LARGURA_DA_TELA-140, y1=ALTURA_DA_TELA-400, y2=ALTURA_DA_TELA-325, y3=ALTURA_DA_TELA-550, y4=ALTURA_DA_TELA-388):
+    def __init__(self, nivel, x1=LARGURA_DA_TELA-250, x2=LARGURA_DA_TELA-150, x3=LARGURA_DA_TELA-140, y1=ALTURA_DA_TELA-400, y2=ALTURA_DA_TELA-350, y3=ALTURA_DA_TELA-550, y4=ALTURA_DA_TELA-388):
     #Cesta(LARGURA_DA_TELA-250, LARGURA_DA_TELA-150, LARGURA_DA_TELA-140, 400, 475, 250, 412)
         self.P1 = [x1, y1]
         self.P2 = [x2, y1]
@@ -213,7 +212,7 @@ class Bola:
 class Chao:
     def __init__(self):
         self.shape = pymunk.Segment(space.static_body, (-30, ALTURA_DA_TELA-95), (LARGURA_DA_TELA+30, ALTURA_DA_TELA-95), 5)
-        self.shape.elasticity = 0.3
+        self.shape.elasticity = 0.7
         self.shape.friction = 0.5
 
         space.add(self.shape)

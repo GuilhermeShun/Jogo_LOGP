@@ -17,21 +17,21 @@ def tela_inicial(tela):
     texto_start = exibir_texto(tela, "Iniciar", 0,0, 30, (255, 255, 255))
     texto_options = exibir_texto(tela, "Opções", 0, 0, 30, (255, 255, 255))
     texto_exit = exibir_texto(tela, "Sair", 0, 0, 30, (255, 255, 255))        
-    start_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 150})
-    options_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 75})
-    exit_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2})
+    start_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 100})
+    options_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 25})
+    exit_button = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 + 50})
     botoes_menu = [start_button, options_button, exit_button]
     COR_DE_FUNDO = tema_menu["background"]
-    RETANGULO_DOS_BOTOES = pygame.Rect(LARGURA_DA_TELA/2 - 200, ALTURA_DA_TELA/2 - 200, 400, 300)
+    RETANGULO_DOS_BOTOES = pygame.Rect(LARGURA_DA_TELA/2 - 200, ALTURA_DA_TELA/2 - 150, 400, 300)
    
-    botao_nivel_facil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 300, "coordenada_vertical": ALTURA_DA_TELA-100})
-    botao_nivel_medio = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 550, "coordenada_vertical": ALTURA_DA_TELA-100})
-    botao_nivel_dificil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 800, "coordenada_vertical": ALTURA_DA_TELA-100})
+    botao_nivel_facil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 250, "coordenada_vertical": ALTURA_DA_TELA-100})
+    botao_nivel_medio = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 500, "coordenada_vertical": ALTURA_DA_TELA-100})
+    botao_nivel_dificil = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 750, "coordenada_vertical": ALTURA_DA_TELA-100})
 
     texto_botao_nivel_facil = exibir_texto(tela, "Fácil", 0,0, 30, (255, 255, 255))
     texto_botao_nivel_medio = exibir_texto(tela, "Médio", 0,0, 30, (255, 255, 255))
     texto_botao_nivel_dificil = exibir_texto(tela, "Difícil", 0,0, 30, (255, 255, 255))
-    texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
+    #texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
     botoes_dificuldade = [botao_nivel_facil, botao_nivel_medio, botao_nivel_dificil]
     while True:
         
@@ -121,7 +121,7 @@ def tela_inicial(tela):
         botao_nivel_dificil.desenhar()
         botao_nivel_medio.desenhar()
 
-        tela.blit(texto_nivel, pygame.Rect(100, ALTURA_DA_TELA-100, 150, 50))
+        #tela.blit(texto_nivel, pygame.Rect(100, ALTURA_DA_TELA-100, 150, 50))
         tela.blit(texto_botao_nivel_facil, texto_botao_nivel_facil.get_rect(center=(botao_nivel_facil.posicao_x + botao_nivel_facil.largura / 2, botao_nivel_facil.posicao_y + botao_nivel_facil.altura / 2)))
         tela.blit(texto_botao_nivel_medio, texto_botao_nivel_medio.get_rect(center=(botao_nivel_medio.posicao_x + botao_nivel_medio.largura / 2, botao_nivel_medio.posicao_y + botao_nivel_medio.altura / 2)))
         tela.blit(texto_botao_nivel_dificil, texto_botao_nivel_dificil.get_rect(center=(botao_nivel_dificil.posicao_x + botao_nivel_dificil.largura / 2, botao_nivel_dificil.posicao_y + botao_nivel_dificil.altura / 2)))
@@ -226,8 +226,8 @@ def jogo(tela):
     cesta = Cesta(nivel)
     bola = Bola()
     chao = Chao()
-    parede_esquerda = Paredes((0, 0), (0, ALTURA_DA_TELA))
-    parede_direita = Paredes((LARGURA_DA_TELA, 0), (LARGURA_DA_TELA, ALTURA_DA_TELA))
+    parede_esquerda = Paredes((0, -ALTURA_DA_TELA), (0, ALTURA_DA_TELA))
+    parede_direita = Paredes((LARGURA_DA_TELA, -ALTURA_DA_TELA), (LARGURA_DA_TELA, ALTURA_DA_TELA))
     tempo_ao_ajustar = 0
     velocidade_horizontal = 0
     velocidade_vertical = 0
@@ -241,7 +241,7 @@ def jogo(tela):
     distancia_linha_de_3 = 300
     largura_linha_de_3 = 6
     tempo_ao_iniciar = pygame.time.get_ticks()
-    tempo_limite = 30000
+    tempo_limite = 5000
     tempo_de_pausa = 0
     tempo_total_pausado = 0
     tempo_faltando = tempo_limite
@@ -249,7 +249,11 @@ def jogo(tela):
     arremessos_de_3 = 0
     arremessos_totais_convertidos = 0
     arremessos_de_3_convertidos = 0
-
+    quiques = 0
+    verificador_de_quiques = pygame.Rect(0, ALTURA_DA_TELA - 100 - 20, LARGURA_DA_TELA, 15)
+    quique_contabilizado = True
+    tempo_ao_acertar = pygame.time.get_ticks()
+    tempo_ao_lancar = 60000
     if nivel == "Fácil":
         COR_DE_FUNDO = tema_azul["background"]
         COR_DO_CHAO = tema_azul["chao"]
@@ -273,9 +277,6 @@ def jogo(tela):
         COR_DO_BOTAO_HOVER = tema_vermelho["botao_hover"]        
 
     while True:
-        
-        
-
         retangulo = pygame.Rect(cesta.rede_esquerda_body.position.x, cesta.rede_esquerda_body.position.y+cesta.altura-bola.radius-5, cesta.largura, 2*bola.radius)
 
         contador += 1
@@ -309,6 +310,7 @@ def jogo(tela):
                 return False
             else:
                 tempo_total_pausado += resultado_da_pausa
+                
         if tempo_faltando <= 0 and lancamento == False:
             pygame.time.delay(1000)
             cesta.remover_do_pymunk()
@@ -317,24 +319,26 @@ def jogo(tela):
             parede_esquerda.remover_do_pymunk()
             chao.remover_do_pymunk()
             resultado_tela_fim_de_jogo = fim_de_jogo(tela)
+            
             if resultado_tela_fim_de_jogo == 0:
-                return 0                            #Fechar o jogo              
-                
+                return 0                            #Fechar o jogo                           
             elif resultado_tela_fim_de_jogo == 1:
                 return 1                            #Ir para a tela inicial
             elif resultado_tela_fim_de_jogo == 2:
                 return 2                            #Reiniciar o jogo
 
         #realização do lançamento
-        if mouse_clicado and not botao_retornar.clicado(mouse_clicado) and not botao_pausar.clicado(mouse_clicado) and not lancamento:
+        if mouse_clicado and not botao_retornar.clicado(mouse_clicado) and not botao_pausar.clicado(mouse_clicado) and not lancamento and tempo_ao_lancar - tempo_faltando >= 1000:
 
             lancamento = True
+            tempo_ao_lancar = tempo_faltando
             bola.lancamento(5*velocidade_horizontal, 5*velocidade_vertical)
             arremessos_totais += 1    
             if bola.posicao_horizontal_ao_lancar < distancia_linha_de_3-largura_linha_de_3/2:
                 arremessos_de_3 += 1        
         #se a bola sair da tela ou o jogador solicitar, é feito um respawn dela e a função cesta.posicao_aleatoria() é chamada, modificando sua posição aleatoriamente
         #if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50):
+        '''
         if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0)):
 
             acertou = False
@@ -342,28 +346,57 @@ def jogo(tela):
             bola.respawn()
                        
             tempo_ao_ajustar = pygame.time.get_ticks()
+        '''
+        if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or quiques >= 3 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0) or tempo_ao_lancar - tempo_faltando >= 10000 or (bola.body.velocity.y == 0 and verificador_de_quiques.collidepoint(bola.body.position))):
+
+            acertou = False
+            pode_fazer_ponto = True
+            quiques = 0
+            bola.respawn()
+                       
+            tempo_ao_ajustar = pygame.time.get_ticks()
 
         if retangulo.collidepoint(bola.body.position):
             acertou = True
-        if acertou == True and pode_fazer_ponto == True:
-            if not nivel == "Fácil":
-                cesta.posicao_aleatoria()
-            #No basquete, caso o jogador pise na linha, a cesta é de 2 pontos. 
-            #Como no pygame a largura da linha é considerada para os dois lados a partir do seu centro, então a distância da linha de 3 deve ser considerada somada à metade da largura da linha
-            arremessos_totais_convertidos += 1
-            if bola.posicao_horizontal_ao_lancar < distancia_linha_de_3-largura_linha_de_3/2:
-                arremessos_de_3_convertidos += 1
-                pontuacao += 3
-            elif bola.posicao_horizontal_ao_lancar >= distancia_linha_de_3-largura_linha_de_3/2:
-                pontuacao += 2
-            pode_fazer_ponto = False
+
+        if tempo_ao_lancar - tempo_faltando >= 10000 or (bola.body.velocity.y == 0 and verificador_de_quiques.collidepoint(bola.body.position)):
             lancamento = False
-
-
             bola.respawn()
-            acertou = False
-            pode_fazer_ponto = True
-         
+
+        if not verificador_de_quiques.collidepoint(bola.body.position):
+            quique_contabilizado = False 
+        if verificador_de_quiques.collidepoint(bola.body.position) and not quique_contabilizado:
+            quiques += 1
+            quique_contabilizado = True
+        if acertou == True:
+            if pode_fazer_ponto == True:
+                #No basquete, caso o jogador pise na linha, a cesta é de 2 pontos. 
+                #Como no pygame a largura da linha é considerada para os dois lados a partir do seu centro, então a distância da linha de 3 deve ser considerada somada à metade da largura da linha
+                arremessos_totais_convertidos += 1
+                if bola.posicao_horizontal_ao_lancar < distancia_linha_de_3-largura_linha_de_3/2:
+                    arremessos_de_3_convertidos += 1
+                    pontuacao += 3
+                elif bola.posicao_horizontal_ao_lancar >= distancia_linha_de_3-largura_linha_de_3/2:
+                    pontuacao += 2
+                tempo_ao_acertar = tempo_faltando
+
+                pode_fazer_ponto = False
+
+            if tempo_faltando <= 0:
+                lancamento = False
+                pygame.time.delay(500)
+
+            if tempo_ao_acertar - tempo_faltando >= 500:
+                if not nivel == "Fácil":
+                    cesta.posicao_aleatoria()
+                lancamento = False
+                acertou = False
+
+                bola.respawn()
+                pode_fazer_ponto = True
+                quiques = 0
+
+        print(quiques)
 
         if nivel == "Difícil":
             cesta.movimento_horizontal()
@@ -400,6 +433,7 @@ def jogo(tela):
             lancamento = False
             acertou = False
             pode_fazer_ponto = True
+            quiques = 0
      
 
         #Preenchimento da tela com a cor de fundo, para que a cada frame haja uma atualização do que é exibido
@@ -445,7 +479,7 @@ def jogo(tela):
         '''
 
         #Se o lançamento não estiver acontecendo, o vetor que representa a velocidade de lançamento e o ângulo é desenhado
-        if not lancamento:
+        if not lancamento and tempo_faltando>0:
             pontos_trajetoria.clear()
             pygame.draw.line(tela, COR_DO_VETOR, (int(bola.body.position.x), int(bola.body.position.y)), (int(bola.body.position.x)+int(velocidade_horizontal), int(bola.body.position.y)+int(velocidade_vertical)), 4)
     
@@ -483,11 +517,36 @@ def fim_de_jogo(tela):
         
         botao_jogar_novamente.desenhar()
         botao_voltar_a_tela_inicial.desenhar()
+        
         tela.blit(texto_botao_jogar_novamente, texto_botao_jogar_novamente.get_rect(center=(botao_jogar_novamente.posicao_x + botao_jogar_novamente.largura / 2, botao_jogar_novamente.posicao_y + botao_jogar_novamente.altura / 2)))        
         tela.blit(texto_botao_voltar_a_tela_inicial, texto_botao_voltar_a_tela_inicial.get_rect(center=(botao_voltar_a_tela_inicial.posicao_x + botao_voltar_a_tela_inicial.largura / 2, botao_voltar_a_tela_inicial.posicao_y + botao_voltar_a_tela_inicial.altura / 2)))        
-        tela.blit(exibir_texto(tela, f'Arremessos: {arremessos_totais_convertidos}/{arremessos_totais}. Porcentagem: {(100*arremessos_totais_convertidos/arremessos_totais):.0f}%', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 300, 50))
-        tela.blit(exibir_texto(tela, f'Arremessos de 3: {arremessos_de_3_convertidos}/{arremessos_de_3}. Porcentagem: {(100*arremessos_de_3_convertidos/arremessos_de_3):.0f}%', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 300, 50))
-        tela.blit(exibir_texto(tela, f'Pontos: {pontuacao}', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+250, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+250, 300, 50))
+        
+        if arremessos_totais != 0:
+            tela.blit(exibir_texto(tela, f'Arremessos: {arremessos_totais_convertidos}/{arremessos_totais} ({(100*arremessos_totais_convertidos/arremessos_totais):.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 30, (255, 255, 255), 'verdana'),pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-200, 600, 50))
+        elif arremessos_totais == 0:
+            tela.blit(exibir_texto(tela, f'Arremessos: {arremessos_totais_convertidos}/{arremessos_totais} ({0:.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 30, (255, 255, 255), 'verdana'), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-200, 600, 50))
+        
+        if arremessos_de_3 != 0:
+            tela.blit(exibir_texto(tela, f'Arremessos de 3: {arremessos_de_3_convertidos}/{arremessos_de_3} ({(100*arremessos_de_3_convertidos/arremessos_de_3):.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 30, (255, 255, 255), 'verdana'), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-150, 600, 50))
+        elif arremessos_de_3 == 0:
+            tela.blit(exibir_texto(tela, f'Arremessos de 3: {arremessos_de_3_convertidos}/{arremessos_de_3} ({0:.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 30, (255, 255, 255), 'verdana'), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-150, 600, 50))
+        
+        tela.blit(exibir_texto(tela, f'Pontos: {pontuacao}', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+250, 50, (255, 255, 255), 'verdana'), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-270, 600, 50))
+
+        '''
+        if arremessos_totais != 0:
+            tela.blit(exibir_texto(tela, f'Arremessos: {arremessos_totais_convertidos}/{arremessos_totais} ({(100*arremessos_totais_convertidos/arremessos_totais):.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-200, 600, 50), 'arial')
+        elif arremessos_totais == 0:
+            tela.blit(exibir_texto(tela, f'Arremessos: {arremessos_totais_convertidos}/{arremessos_totais} ({0:.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+150, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-200, 600, 50), 'arial')
+        
+        if arremessos_de_3 != 0:
+            tela.blit(exibir_texto(tela, f'Arremessos de 3: {arremessos_de_3_convertidos}/{arremessos_de_3} ({(100*arremessos_de_3_convertidos/arremessos_de_3):.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-150, 600, 50), 'arial')
+        elif arremessos_de_3 == 0:
+            tela.blit(exibir_texto(tela, f'Arremessos de 3: {arremessos_de_3_convertidos}/{arremessos_de_3} ({0:.0f}%)', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+200, 30, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-150, 600, 50), 'arial')
+        
+        tela.blit(exibir_texto(tela, f'Pontos: {pontuacao}', LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2+250, 50, (255, 255, 255)), pygame.Rect(LARGURA_DA_TELA/2-300, ALTURA_DA_TELA/2-270, 600, 50), 'arial')
+        '''
+
         if botao_voltar_a_tela_inicial.clicado(mouse_clicado):
             mouse_clicado = False
 
