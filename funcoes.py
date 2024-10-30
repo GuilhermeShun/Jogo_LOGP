@@ -1,4 +1,5 @@
-import pygame, pymunk, random
+import pygame, pymunk
+from random import randint
 from constantes import *
 
 def exibir_texto(tela, texto, x, y, tamanho, cor, fonte_nome="comicsans"):
@@ -97,7 +98,7 @@ class Cesta:
 
     #função que altera aleatoriamente, em um determinado intervalo, a posição da cesta
     def posicao_aleatoria(self):
-        variacao_vertical = random.randint(-150, 150)
+        variacao_vertical = randint(-150, 150)
         #Evita que o range da variação vertical seja definido a partir da posição atual da cesta, garantindo que ela esteja sempre no máximo 150 pixels acima ou abaixo da posição inicial
         self.aro_esquerdo_body.position = self.extremidades["aro_esquerdo"][0]
         self.rede_esquerda_body.position = self.extremidades["rede_esquerda"][0]

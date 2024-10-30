@@ -1,4 +1,5 @@
-import pygame, math
+import pygame
+from math import radians 
 from constantes import *
 from funcoes import *
 
@@ -170,19 +171,23 @@ def configuracoes(tela):
 
         pygame.display.update()
 
-def pausa(tela):
+def pausa(tela, tempo_restante, pontos):
     global mouse_clicado
-    botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 50, "coordenada_vertical": ALTURA_DA_TELA / 2})
+    botao_retornar = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 - 35})
+    botao_tela_inicial = Botao(tema_menu["botao"], {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA / 2 - 100, "coordenada_vertical": ALTURA_DA_TELA / 2 + 35})
 
-    texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
-    botoes = [botao_retornar]
+    texto_botao_retornar = exibir_texto(tela, "Retomar", 0,0, 30, (255, 255, 255))
+    texto_botao_tela_inicial = exibir_texto(tela, "Tela inicial", 0,0, 30, (255, 255, 255))
+    RETANGULO_DOS_BOTOES = pygame.Rect(LARGURA_DA_TELA/2 - 200, ALTURA_DA_TELA/2 - 75, 400, 200)
+
+    botoes = [botao_retornar, botao_tela_inicial]
     tempo_inicial = pygame.time.get_ticks()
     while True:
         tempo = pygame.time.get_ticks()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                return 0
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:                    
                     mouse_clicado = True
@@ -192,23 +197,31 @@ def pausa(tela):
         
  
         
+        tela.fill(tema_menu["background"])
         tempo_decorrido_na_pausa = tempo - tempo_inicial
         
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
             return tempo_decorrido_na_pausa
-
-        tela.fill((255, 100, 100))
+        
+        if botao_tela_inicial.clicado(mouse_clicado):
+            mouse_clicado = False
+            return 1
+        
         for botao in botoes:
             if botao.mouse_sobre():
-                botao.cor = (25, 25, 25)
+                botao.cor = tema_menu["botao_hover"]
             else:
-                botao.cor = (0, 0, 0)  
+                botao.cor = tema_menu["botao"]
 
+        pygame.draw.rect(tela, tema_menu["em_volta_dos_botoes"], RETANGULO_DOS_BOTOES)
         botao_retornar.desenhar()
+        botao_tela_inicial.desenhar()
 
         tela.blit(texto_botao_retornar, texto_botao_retornar.get_rect(center=(botao_retornar.posicao_x + botao_retornar.largura / 2, botao_retornar.posicao_y + botao_retornar.altura / 2)))
-
+        tela.blit(texto_botao_tela_inicial, texto_botao_tela_inicial.get_rect(center=(botao_tela_inicial.posicao_x + botao_tela_inicial.largura / 2, botao_tela_inicial.posicao_y + botao_tela_inicial.altura / 2)))
+        exibir_pontuacao(pontuacao)
+        exibir_tempo(tempo_restante)
         clock.tick(FPS)
 
         pygame.display.update()
@@ -241,7 +254,7 @@ def jogo(tela):
     distancia_linha_de_3 = 300
     largura_linha_de_3 = 6
     tempo_ao_iniciar = pygame.time.get_ticks()
-    tempo_limite = 5000
+    tempo_limite = 60000
     tempo_de_pausa = 0
     tempo_total_pausado = 0
     tempo_faltando = tempo_limite
@@ -253,7 +266,7 @@ def jogo(tela):
     verificador_de_quiques = pygame.Rect(0, ALTURA_DA_TELA - 100 - 20, LARGURA_DA_TELA, 15)
     quique_contabilizado = True
     tempo_ao_acertar = pygame.time.get_ticks()
-    tempo_ao_lancar = 60000
+    tempo_ao_lancar = tempo_limite+1000
     if nivel == "Fácil":
         COR_DE_FUNDO = tema_azul["background"]
         COR_DO_CHAO = tema_azul["chao"]
@@ -305,9 +318,11 @@ def jogo(tela):
             return True
         if botao_pausar.clicado(mouse_clicado):
             mouse_clicado = False
-            resultado_da_pausa = pausa(tela)
-            if resultado_da_pausa == False:
-                return False
+            resultado_da_pausa = pausa(tela, tempo_faltando, pontuacao)
+            if resultado_da_pausa == 0:
+                return 0
+            elif resultado_da_pausa == 1:
+                return 1
             else:
                 tempo_total_pausado += resultado_da_pausa
                 
@@ -347,11 +362,12 @@ def jogo(tela):
                        
             tempo_ao_ajustar = pygame.time.get_ticks()
         '''
-        if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or quiques >= 3 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0) or tempo_ao_lancar - tempo_faltando >= 10000 or (bola.body.velocity.y == 0 and verificador_de_quiques.collidepoint(bola.body.position))):
+        if (bola.body.position.x > LARGURA_DA_TELA+50 or bola.body.position.x < -50 or quiques >= 4 or (key[pygame.K_q] and tempo-tempo_ao_ajustar>=1000 and tempo_faltando >= 0) or tempo_ao_lancar - tempo_faltando >= 10000 or (bola.body.velocity.y == 0 and verificador_de_quiques.collidepoint(bola.body.position))):
 
             acertou = False
             pode_fazer_ponto = True
             quiques = 0
+            quique_contabilizado = False
             bola.respawn()
                        
             tempo_ao_ajustar = pygame.time.get_ticks()
@@ -395,6 +411,7 @@ def jogo(tela):
                 bola.respawn()
                 pode_fazer_ponto = True
                 quiques = 0
+                quique_contabilizado = False
 
         print(quiques)
 
@@ -434,6 +451,7 @@ def jogo(tela):
             acertou = False
             pode_fazer_ponto = True
             quiques = 0
+            quique_contabilizado = False
      
 
         #Preenchimento da tela com a cor de fundo, para que a cada frame haja uma atualização do que é exibido
@@ -467,7 +485,7 @@ def jogo(tela):
         if tempo_faltando <= 0:
             tempo_faltando = 0
         exibir_tempo(tempo_faltando)
-        pygame.draw.arc(tela, (255, 255, 255), pygame.Rect(distancia_linha_de_3-2, ALTURA_DA_TELA-219, 400, 240), math.radians(180), math.radians(250), 5)
+        pygame.draw.arc(tela, (255, 255, 255), pygame.Rect(distancia_linha_de_3-2, ALTURA_DA_TELA-219, 400, 240), radians(180), radians(250), 5)
         '''
         
         if key[pygame.K_t]:
@@ -492,8 +510,8 @@ def jogo(tela):
         pygame.display.update()
 
 def fim_de_jogo(tela):
-    botao_jogar_novamente = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": 400, "coordenada_vertical": 300})
-    botao_voltar_a_tela_inicial = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": 400, "coordenada_vertical": 370})
+    botao_jogar_novamente = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA/2 - 150, "coordenada_vertical": ALTURA_DA_TELA - 175})
+    botao_voltar_a_tela_inicial = Botao((0, 255, 255), {"largura": 300, "altura": 50}, tela, {"coordenada_horizontal": LARGURA_DA_TELA/2 - 150, "coordenada_vertical": ALTURA_DA_TELA - 100})
     botoes = [botao_jogar_novamente, botao_voltar_a_tela_inicial]
     texto_botao_jogar_novamente = exibir_texto(tela, "Jogar novamente", 0,0, 30, (255, 255, 255))
     texto_botao_voltar_a_tela_inicial = exibir_texto(tela, "Tela inicial", 0,0, 30, (255, 255, 255))
