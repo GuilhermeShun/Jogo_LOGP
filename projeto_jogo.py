@@ -34,6 +34,9 @@ def tela_inicial(tela):
     texto_botao_nivel_dificil = exibir_texto(tela, "Difícil", 0,0, 30, (255, 255, 255))
     #texto_nivel = exibir_texto(tela, "Nível: ", 0, 0, 30, (255, 255, 255))
     botoes_dificuldade = [botao_nivel_facil, botao_nivel_medio, botao_nivel_dificil]
+
+    
+
     while True:
         
         tela.fill(COR_DE_FUNDO)
@@ -133,10 +136,18 @@ def tela_inicial(tela):
 
 def configuracoes(tela):
     global mouse_clicado, lancamento, nivel
+
+    #Imagem de tutorial
+    tutorial = pygame.image.load('Tutorial.png')
+    
+
     botao_retornar = Botao(cor_do_botao, {"largura": 200, "altura": 50}, tela, {"coordenada_horizontal": 30, "coordenada_vertical": 20})
 
     texto_botao_retornar = exibir_texto(tela, "Retornar", 0,0, 30, (255, 255, 255))
     botoes = [botao_retornar]
+
+    tela.blit(tutorial,(0,0))
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -148,13 +159,13 @@ def configuracoes(tela):
                 if event.button == 1:                    
                     mouse_clicado = False   
         
-
+        
         
         if botao_retornar.clicado(mouse_clicado):
             mouse_clicado = False
             return True
         
-        tela.fill((60, 60, 60))
+        
 
         for botao in botoes:
             if botao.mouse_sobre():
